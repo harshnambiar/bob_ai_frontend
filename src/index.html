@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awesom AI - Resurgence Labs</title>
+    <link rel="shortcut icon" href="img/awesomlog.png">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <nav>
+
+            <div class="logo">Awesom AI</div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-center">
+                <li><a href="./" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="faqs.html">FAQ</a></li>
+                <li><a class="btn2" id="log_status" onclick="connectOrDisconnect();">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+
+    <section class="hero">
+        <h1>The AI Agent Era is here. And Awesom AI is here to bring it to Somnia.</h1>
+        <p>Introducing Awesom AI, a Somnia centric AI agent build specifically for the Somnia Ecosystem and Community.</p>
+        <a class="btn" onclick="form1()">Join Beta Program</a>
+
+    </section>
+
+    <section class="features">
+        <h2>What can Awesom AI do?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Answer Queries About Somnia</h3>
+                <p>Awesom AI has your back when you need more info about Somnia.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Complete On-chain Actions for You</h3>
+                <p>Awesom AI can swap or stake tokens or buy or sell NFTS for you on the Somnia chain.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Help You Build Cool Things On Somnia</h3>
+                <p>Want help to build your own cool dapp on Somnia? Awesom AI will be there to help with your code!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose Awesom AI?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Simple Chat Interface</h3>
+                <p>Easy to use and easy to understand.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Dedicated to Somnia</h3>
+                <p>Awesom AI supports Somnia and only Somnia. It is 100% focused on the Somnia ecosystem.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Doesn't Access Your Data</h3>
+                <p>Your data is yours alone. Awesom AI does not store it.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="query-container">
+        <button class="query-toggle" id="query-toggle">🛠️</button>
+        <div class="query-window" id="query-window">
+            <div class="query-header">
+                <h3>Awesom AI Query Builder</h3>
+                <button class="query-close" id="query-close">✖</button>
+            </div>
+            <div class="query-body">
+                <div class="query-results" id="query-results">
+
+                </div>
+            </div>
+            <form class="query-input-form" id="query-form">
+                <input type="text" id="query-input" placeholder="type the keywords for your query" autocomplete="off">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <button class="chat-toggle" id="chat-toggle">💬</button>
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <h3>Awesom AI Chat</h3>
+                <button class="chat-close" id="chat-close">✖</button>
+            </div>
+            <div class="chat-body">
+                <div class="chat-messages" id="chat-messages">
+                    <p class='message bot'>Welcome to Awesom AI! How can I assist you with Somnia today?</p>
+                </div>
+            </div>
+            <form class="chat-input-form" id="chat-form">
+                <input type="text" id="chat-input" placeholder="type your Somnia query" autocomplete="off">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Resurgence Labs &copy; 2025</p>
+    </footer>
+    <script>
+        var chatOn = false;
+        var queryOn = false;
+        document.getElementById("mobile-menu").addEventListener("click", function () {
+            document.querySelector(".nav-center").classList.toggle("nav-active");
+        });
+
+        document.getElementById("chat-toggle").addEventListener("click", function () {
+            const chatWindow = document.getElementById("chat-window");
+            document.getElementById("query-window").classList.remove("active");
+            chatWindow.classList.toggle("active");
+        });
+
+        document.getElementById("chat-close").addEventListener("click", function () {
+            document.getElementById("chat-window").classList.remove("active");
+        });
+
+
+        // Handle message submission
+        document.getElementById("chat-form").addEventListener("submit", async function (e) {
+            e.preventDefault(); // Prevent form from refreshing the page
+            const input = document.getElementById("chat-input");
+            const messageText = input.value.trim();
+
+            if (messageText) {
+                const messagesContainer = document.getElementById("chat-messages");
+
+                // Add user message
+                const userMessage = document.createElement("p");
+                userMessage.classList.add("message", "user");
+                userMessage.textContent = messageText;
+                messagesContainer.appendChild(userMessage);
+
+                // Clear input
+                input.value = "";
+
+                // Scroll to the bottom of the messages
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // bot response
+                const botResponse = await getBotResponse(messageText);
+                const urlEnabledBotResponse = await createHtmlResponse(botResponse);
+                setTimeout(() => {
+                    const botMessage = document.createElement("p");
+                    botMessage.classList.add("message", "bot");
+                    botMessage.innerHTML = urlEnabledBotResponse;
+                    messagesContainer.appendChild(botMessage);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 500);
+            }
+        });
+
+        document.getElementById("query-toggle").addEventListener("click", function () {
+            const queryWindow = document.getElementById("query-window");
+            document.getElementById("chat-window").classList.remove("active");
+            queryWindow.classList.toggle("active");
+        });
+
+        document.getElementById("query-close").addEventListener("click", function () {
+            document.getElementById("query-window").classList.remove("active");
+        });
+
+        // Handle query submission
+        document.getElementById("query-form").addEventListener("submit", async function (e) {
+            e.preventDefault(); // Prevent form from refreshing the page
+            const input = document.getElementById("query-input");
+            const queryText = input.value.trim();
+
+            if (queryText) {
+                const resultContainer = document.getElementById("query-results");
+                resultContainer.innerHTML = ``;
+
+                var suggestions = await getQuerySuggestions(queryText);
+                if (suggestions.length == 0){
+                    suggestions.push('No Results Found.');
+                }
+                setTimeout(() => {
+                    var i = 0;
+                    while (i < suggestions.length){
+                        const newSuggestion = document.createElement("p");
+                        newSuggestion.innerHTML = suggestions[i];
+                        resultContainer.appendChild(newSuggestion);
+                        i++;
+                    }
+                    resultContainer.scrollTop = resultContainer.scrollHeight;
+                }, 500);
+
+                console.log(suggestions);
+                // Clear input
+                input.value = "";
+            }
+
+        });
+
+
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>
