@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs - Bob AI</title>
+    <link rel="shortcut icon" href="img/awesomlog.png">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Bob AI</div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-center">
+                <li><a href="./">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="docs.html" class="active">Docs</a></li>
+                <li><a href="faqs.html">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="content">
+        <h1>Info Queries</h1>
+        <p>To make information queries free for the Boba community, Bob AI maintains a huge reservoir of pre-fabricated queries to get you introduced to the Boba Network and its ecosystem. These queries must be prefixed with an 'i:', for example, 'i:what is boba?'. These are directly processed by Bob AI's backend without making additional third party calls and are 100% free. Here are some of the info queries you can use:</p>
+        <p>• what is boba?<br/>
+        • what does the boba network do?<br/>
+        • how can i get started on boba?<br/>
+        • what are some cool projects on boba?<br/>
+        • what are some good ___ projects on boba? (replace ___ with defi, nft, infrastructure, etc)<br/>
+        • what are the network details for boba?<br/>
+        • what is bob ai?<br/>
+        • tell me about the boba grants program.<br/>
+        • what is the latest news about boba.<br/>
+        Please note that the queries are case insensitive and must be preceded by 'i:'. The above is a list of common queries but this is not the exhaustive list, which contains over 10000 queries. Please refer to the query file <a style="color:aquamarine;cursor: pointer;" target="_blank" href="https://github.com/harshnambiar/bob_ai_frontend/blob/main/src/querymap.json">here</a>.</p>
+    </section>
+    
+    <section class="content">
+        <h1>Transaction Queries</h1>
+        <p>To enable the users to be able to complete transactions on the Boba Network without much hassle, Bob AI offers many transaction queries that can be used in the chat interface. Here are some of the transaction queries you can use:</p>
+        <p>• swap ___ tokens for ___. (where ___ represents the token codes for the token being swapped and obtained. Please note that these must be existing tokens on the Boba Chain only.)</p>
+        <p>• send ___ token to ____. (where ___ represents token amount and code followed by the receiver address)</p>
+        <p>• send ___ NFT to ____. (where ____ represents the NFT id and the other is the receiver address)</p>
+        <p>• stake ____ tokens. (where ___ is the number of $BOBA tokens to stake)</p>
+        <p>Please note that the queries are case insensitive and must be preceded by 'tx:'. Also, they will prompt you to sign-up the transaction with your wallet. The query will fail if you are not logged in with your Metamask.</p>
+    </section>
+    
+    <section class="content">
+        <h1>Custom Queries</h1>
+        <p>To enable the users to ask something beyond these, Bob AI has custom queries. These must be preceded by a "keyval:", where the keyval is a secret key (usually 12 character long) which can be obtained after successfully applying for the <a href="https://form.jotform.com/252172180330041" target="_blank">Beta Program</a>.</p>
+    </section>
+    
+
+    <footer>
+        <p>Resurgence Labs &copy; 2025</p>
+    </footer>
+    <script>
+        document.getElementById("mobile-menu").addEventListener("click", function () {
+            document.querySelector(".nav-center").classList.toggle("nav-active");
+        });
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>

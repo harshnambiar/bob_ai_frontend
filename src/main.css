@@ -34,7 +34,7 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #00ff88;
+    color: #00ee33;
     text-transform: uppercase;
 }
 
@@ -55,11 +55,11 @@ nav ul li a {
 }
 
 nav ul li a:hover, nav ul li a.active {
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .btn {
-    background: #00ff88;
+    background: #00ee33;
     color: #0a0a1a;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -69,12 +69,12 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .btn:hover {
-    background: #00cc66;
+    background: #000033;
     cursor: pointer;
 }
 
 .btn2 {
-    background: #00ff88;
+    background: #00ee33;
     color: #0a0a1a;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -84,8 +84,8 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .btn2:hover {
-    background: #cccccc;
-    color: #00ff88;
+    background: #000033;
+    color: #00ee33;
     cursor: pointer;
 }
 
@@ -105,7 +105,7 @@ nav ul li a:hover, nav ul li a.active {
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #00ff88;
+    color: #00ee33;
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
@@ -152,7 +152,7 @@ nav ul li a:hover, nav ul li a.active {
 .features h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .feature-grid {
@@ -168,7 +168,7 @@ nav ul li a:hover, nav ul li a.active {
     padding: 2rem;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #00ff88;
+    border: 1px solid #00ee33;
 }
 
 .feature-card:hover {
@@ -237,7 +237,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Chat toggle button */
 .chat-toggle {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: white;
     border: none;
     border-radius: 50%;
@@ -250,7 +250,7 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .chat-toggle:hover {
-    background-color: #007bff;
+    background-color: #000033;
 }
 
 /* Chat window */
@@ -274,7 +274,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Chat header */
 .chat-header {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: white;
     padding: 10px;
     display: flex;
@@ -324,7 +324,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Bot message bubble */
 .message.bot {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: #000;
     align-self: flex-start;
     border-bottom-left-radius: 4px; /* Slightly flatten bottom-left for Messenger-like style */
@@ -355,7 +355,7 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .chat-input-form button {
-    background-color: #007bff;
+    background-color: #000033;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -377,7 +377,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Chat toggle button */
 .query-toggle {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: white;
     border: none;
     border-radius: 50%;
@@ -390,7 +390,7 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .query-toggle:hover {
-    background-color: #007bff;
+    background-color: #000033;
 }
 
 /* Chat window */
@@ -414,7 +414,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* Query header */
 .query-header {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: white;
     padding: 10px;
     display: flex;
@@ -466,7 +466,7 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .query-input-form button {
-    background-color: #007bff;
+    background-color: #000033;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -485,7 +485,7 @@ footer {
     background: #0a0a1a;
     text-align: center;
     padding: 2rem;
-    border-top: 1px solid #00ff88;
+    border-top: 1px solid #00ee33;
 }
 
 footer p {
