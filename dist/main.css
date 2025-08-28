@@ -36,7 +36,7 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #00ff88;
+    color: #00ee33;
     text-transform: uppercase;
 }
 
@@ -57,11 +57,11 @@ nav ul li a {
 }
 
 nav ul li a:hover, nav ul li a.active {
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .btn {
-    background: #00ff88;
+    background: #00ee33;
     color: #0a0a1a;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -70,11 +70,11 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .btn:hover {
-    background: #00cc66;
+    background: #000033;
 }
 
 .innerexample {
-    background-color: #00ff88;
+    background-color: #00ee33;
     color: #0a0a1a;
     padding-left:2%;
 }
@@ -143,7 +143,7 @@ nav ul li a:hover, nav ul li a.active {
 .features h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .feature-grid {
@@ -159,7 +159,7 @@ nav ul li a:hover, nav ul li a.active {
     padding: 2rem;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #00ff88;
+    border: 1px solid #00ee33;
 }
 
 .feature-card:hover {
@@ -187,7 +187,7 @@ nav ul li a:hover, nav ul li a.active {
 .features2 h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .feature2-grid {
@@ -203,7 +203,7 @@ nav ul li a:hover, nav ul li a.active {
     padding: 2rem;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #00ff88;
+    border: 1px solid #00ee33;
 }
 
 .feature2-card:hover {
@@ -231,7 +231,7 @@ nav ul li a:hover, nav ul li a.active {
 .content h1 {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    color: #00ff88;
+    color: #00ee33;
 }
 
 .content p, .content ul {
@@ -245,7 +245,7 @@ nav ul li a:hover, nav ul li a.active {
 }
 
 .content a {
-    color: #00ff88;
+    color: #00ee33;
     text-decoration: none;
 }
 
@@ -267,7 +267,7 @@ footer {
     background: #0a0a1a;
     text-align: center;
     padding: 2rem;
-    border-top: 1px solid #00ff88;
+    border-top: 1px solid #00ee33;
 }
 
 footer p {
@@ -296,7 +296,7 @@ footer p {
         font-size: 0.9rem;
     }
     .innerexample {
-        background-color: #00ff88;
+        background-color: #00ee33;
         color: #0a0a1a;
         padding-left:2%;
         font-size: 1rem;
