@@ -17,12 +17,12 @@ async function connectOrDisconnect() {
         return;
     }
 
-    var chainId = 50312;
-    var cid = '0xc488';
-    var chain = 'Somnia Testnet';
-    var name = 'SOMNIA';
-    var symbol = 'STT';
-    var rpc = "https://dream-rpc.somnia.network";
+    var chainId = 28882;
+    var cid = '0x70d2';
+    var chain = 'Boba Sepolia Testnet';
+    var name = 'ETH';
+    var symbol = 'ETH';
+    var rpc = "https://sepoloa.boba.network";
 
     const provider = await detectEthereumProvider()
     console.log(window.ethereum);
@@ -161,6 +161,15 @@ async function getBotResponse(userInput){
             }
 
         }
+        else if (qry == "balance"){
+          try {
+            const bal = await showBalance();
+            return "Your Boba Sepolia ETH balance is: ".concat(bal);
+          }
+          catch (err){
+            return "Failed to fetch balance: ".concat(err);
+          }
+        }
         else {
             return "looks like this is transaction query isn't correctly formatted: ".concat(qry);
         }
@@ -197,10 +206,74 @@ async function getQuerySuggestions(text){
 }
 window.getQuerySuggestions = getQuerySuggestions;
 
+async function showBalance(){
+    const rpcUrl = 'https://sepolia.boba.network';
+    const chainId = '0x70d2';
+    var bal = 0;
+    try {
+      // Check MetaMask availability
+      if (typeof window.ethereum === 'undefined') {
+        throw new Error('MetaMask is not installed');
+      }
+
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      // Switch to Boba Sepolia Testnet
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId,
+              chainName: 'Boba Sepolia Testnet',
+              rpcUrls: [rpcUrl],
+              nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+              blockExplorerUrls: ['https://testnet.bobascan.com'],
+            }],
+          });
+        } else {
+          throw switchError;
+        }
+      }
+
+      // Initialize provider and signer
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      if (!signerAddress) {
+        throw new Error('No signer available. Please connect MetaMask.');
+      }
+
+      // Verify network
+      const network = await provider.getNetwork();
+      if (network.chainId !== 28882n) {
+        throw new Error('Wrong network. Please connect to Boba Sepolia Testnet.');
+      }
+
+
+      // Check native boba ETH balance
+      const decimals = 18;
+      bal = await provider.getBalance(signerAddress);
+      console.log('Balance:', ethers.formatUnits(bal, decimals), 'nanoETH');
+
+  }
+  catch (err){
+    console.log(err);
+  }
+  return bal;
+
+}
+
 
 async function transferTokens(target, amount) {
-  const rpcUrl = 'https://rpc.testnet.somnia.network';
-  const chainId = '0xc488';
+  const rpcUrl = 'https://sepolia.boba.network';
+  const chainId = '0x70d2';
 
   try {
     // Check MetaMask availability
@@ -211,7 +284,7 @@ async function transferTokens(target, amount) {
     // Request account access
     await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-    // Switch to Somnia Shannon Testnet
+    // Switch to Boba Sepolia Testnet
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -223,10 +296,10 @@ async function transferTokens(target, amount) {
           method: 'wallet_addEthereumChain',
           params: [{
             chainId,
-            chainName: 'Somnia Testnet',
+            chainName: 'Boba Sepolia Testnet',
             rpcUrls: [rpcUrl],
-            nativeCurrency: { name: 'SOMNIA', symbol: 'STT', decimals: 18 },
-            blockExplorerUrls: ['https://shannon-explorer.somnia.network'],
+            nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+            blockExplorerUrls: ['https://testnet.bobascan.com'],
           }],
         });
       } else {
@@ -244,8 +317,8 @@ async function transferTokens(target, amount) {
 
     // Verify network
     const network = await provider.getNetwork();
-    if (network.chainId !== 50312n) {
-      throw new Error('Wrong network. Please connect to Somnia Shannon Testnet.');
+    if (network.chainId !== 28882n) {
+      throw new Error('Wrong network. Please connect to Boba Sepolia Testnet.');
     }
 
     // Validate recipient address
@@ -257,9 +330,9 @@ async function transferTokens(target, amount) {
     const decimals = 18;
     const amt = ethers.parseUnits(amount.toString(), decimals);
     const balance = await provider.getBalance(signerAddress);
-    console.log('Balance:', ethers.formatUnits(balance, decimals), 'STT');
+    console.log('Balance:', ethers.formatUnits(balance, decimals), 'ETH');
     if (balance < amt) {
-      throw new Error(`Insufficient STT balance: ${ethers.formatUnits(balance, decimals)} available`);
+      throw new Error(`Insufficient ETH balance: ${ethers.formatUnits(balance, decimals)} available`);
     }
 
     // Check SOM balance for gas
@@ -267,7 +340,7 @@ async function transferTokens(target, amount) {
     const gasLimit = 21000n; // Standard for native transfers
     const gasCost = feeData.maxFeePerGas * gasLimit;
     if (balance < gasCost) {
-      throw new Error(`Insufficient STT for gas: ${ethers.formatUnits(gasCost, decimals)} needed`);
+      throw new Error(`Insufficient ETH for gas: ${ethers.formatUnits(gasCost, decimals)} needed`);
     }
 
     // Send native STT transaction
