@@ -86,6 +86,8 @@ async function startApp(provider) {
       }
     })
     console.log("hi");
+  const timenow = Date.now();
+  localStorage.setItem("last_login", timenow.toString());
   const account = accounts[0];
   var web3 = new Web3(window.ethereum);
   const bal = await web3.eth.getBalance(account);
@@ -97,6 +99,21 @@ async function startApp(provider) {
 
   }
 }
+
+async function disconnectIfNecessary(){
+  const timenow = Date.now();
+  const lastloginstr = localStorage.getItem("last_login") || "0";
+  const lastlogin = Number(lastloginstr);
+  if (timenow - lastlogin > (60 * 60 * 1000)){
+    localStorage.setItem("acc", "");
+    console.log('successfully disconnected account');
+  }
+  else {
+    const account = localStorage.getItem("acc");
+    document.getElementById("log_status").textContent = (account.toString().slice(0,8)).concat('..(Logout)');
+  }
+}
+window.disconnectIfNecessary = disconnectIfNecessary
 
 
 
@@ -147,7 +164,9 @@ async function getBotResponse(userInput){
         const qry1 = userInput.slice(3, userInput.length);
         const qry = qry1.trim();
         const regex = /send\s+(\d*\.?\d+)\s+token[s]?\s+to\s+(.*)$/ ///^send\s+(\d+)\s+tokens\s+to\s+(.*)$/;
+        const regex2 = /save\s+(.*)\s+as\s+(.*)$/;
         const match = qry.match(regex);
+        const match2 = qry.match(regex2);
         if (match){
             const amt = match[1];
             const recipient = match[2];
@@ -170,6 +189,26 @@ async function getBotResponse(userInput){
             return "Failed to fetch balance: ".concat(err);
           }
         }
+        else if (match2){
+          console.log(match2[1]);
+          console.log(match2[2]);
+          var status = 2;
+          const res = await saveContact(match2[1], match2[2]);
+          if (res == 1){
+            return "Saved ".concat(match2[1]).concat(" as ").concat(match2[2]).concat(" in your address book.");
+          }
+          else if (res == 0){
+            return "Failed to save contact. This contact name is already in use.";
+          }
+          else if (res == 3){
+            return "Failed to save contact. Database error. Please try again later.";
+          }
+          else {
+            console.log(status);
+            return "Failed to save contact. Unexpected Error. Please try again later.";
+          }
+
+        }
         else {
             return "looks like this is transaction query isn't correctly formatted: ".concat(qry);
         }
@@ -188,6 +227,72 @@ async function getBotResponse(userInput){
     return "undefined error.";
 }
 window.getBotResponse = getBotResponse;
+
+function saveContact(wallet, name) {
+  return new Promise((resolve, reject) => {
+    let status = 0;
+
+    const request = indexedDB.open('ContactDB', 1);
+
+    request.onupgradeneeded = function(event) {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('contacts')) {
+        db.createObjectStore('contacts', { keyPath: 'name' });
+      }
+    };
+
+    request.onsuccess = function(event) {
+      const db = event.target.result;
+      const transaction = db.transaction(['contacts'], 'readwrite');
+      const store = transaction.objectStore('contacts');
+      const getRequest = store.get(name);
+
+      getRequest.onsuccess = function() {
+        if (getRequest.result) {
+          console.log(`Contact with name ${name} already exists:`, getRequest.result);
+          resolve(status); // Resolve with status 0
+        } else {
+          const contact = { name: name, wallet: wallet };
+          const addRequest = store.add(contact);
+
+          addRequest.onsuccess = function() {
+            status = 1;
+            console.log('Contact saved successfully:', wallet, name);
+            resolve(status); // Resolve with status 1
+          };
+
+          addRequest.onerror = function() {
+            status = 2;
+            console.error('Error saving contact:', addRequest.error);
+            resolve(status);
+          };
+        }
+      };
+
+      getRequest.onerror = function() {
+        status = 2;
+        console.error('Error checking name:', getRequest.error);
+        resolve(status);
+      };
+
+      transaction.oncomplete = function() {
+        db.close();
+      };
+
+      transaction.onerror = function() {
+        status = 2;
+        console.error('Transaction error:', transaction.error);
+        resolve(status);
+      };
+    };
+
+    request.onerror = function(event) {
+      status = 3;
+      console.error('Database error:', event.target.errorCode);
+      resolve(status);
+    };
+  });
+}
 
 function shuffleArray(arr){
     for (let i = arr.length - 1; i > 0; i--){
