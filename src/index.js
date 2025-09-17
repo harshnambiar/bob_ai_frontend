@@ -165,8 +165,12 @@ async function getBotResponse(userInput){
         const qry = qry1.trim();
         const regex = /send\s+(\d*\.?\d+)\s+token[s]?\s+to\s+(.*)$/ ///^send\s+(\d+)\s+tokens\s+to\s+(.*)$/;
         const regex2 = /save\s+(.*)\s+as\s+(.*)$/;
+        const regex3 = /fetch\s+(.*)$/;
+        const regex4 = /update\s+(.*)\s+to\s+(.*)$/;
         const match = qry.match(regex);
         const match2 = qry.match(regex2);
+        const match3 = qry.match(regex3);
+        const match4 = qry.match(regex4);
         if (match){
             const amt = match[1];
             const recipient = match[2];
@@ -192,6 +196,9 @@ async function getBotResponse(userInput){
         else if (match2){
           console.log(match2[1]);
           console.log(match2[2]);
+          if (match2[2] == "" || match2[2] == "none" || match2[2] == "dberror"){
+            return "The target name cannot have the value 'none', 'dberror' or ''";
+          }
           var status = 2;
           const res = await saveContact(match2[1], match2[2]);
           if (res == 1){
@@ -208,6 +215,42 @@ async function getBotResponse(userInput){
             return "Failed to save contact. Unexpected Error. Please try again later.";
           }
 
+        }
+        else if (match3){
+          console.log(match3[1]);
+          const res = await fetchContact(match3[1]);
+          if (res == "none"){
+            return "No record under this name found.";
+          }
+          else if (res == "dberror"){
+            return "Database Error Occured. Please try again later.";
+          }
+          else if (res == ""){
+            return "Unexpected Error Occured. Please try again later or log a bug report.";
+          }
+          else {
+            return "Address for contact ".concat(match3[1]).concat(": ").concat(res);
+          }
+        }
+        else if (match4){
+          console.log(match4[1]);
+          console.log(match4[2]);
+          const res = await updateContact(match4[1], match4[2]);
+          if (res == 1){
+            return "Update contact failed. Contact with this name does not exist.";
+          }
+          else if (res == 2){
+            return "Updated contact ".concat(match4[1]).concat(" to: ").concat(match4[2]);
+          }
+          else if (res == 3){
+            return "Update contact failed. The record could not be updated. Please log a bug or try again later.";
+          }
+          else if (res == 4){
+            return "Update contact failed. Database needs to be updated."
+          }
+          else {
+            return "Unexpected error occured. Please report the bug to Resurgence Labs.";
+          }
         }
         else {
             return "looks like this is transaction query isn't correctly formatted: ".concat(qry);
@@ -227,6 +270,104 @@ async function getBotResponse(userInput){
     return "undefined error.";
 }
 window.getBotResponse = getBotResponse;
+
+function fetchContact(name){
+  return new Promise((resolve, reject) => {
+    let fetched = "";
+    const request = indexedDB.open('ContactDB', 1);
+    request.onsuccess = function(event) {
+      const db = event.target.result;
+      const transaction = db.transaction(['contacts'], 'readonly');
+      const store = transaction.objectStore('contacts');
+      const getRequest = store.get(name);
+      getRequest.onsuccess = function(event) {
+        if (getRequest.result) {
+          status = event.target.result.wallet;
+          resolve(status); // Resolve with status 0
+        }
+        else {
+          resolve("none");
+        }
+        db.close();
+
+      }
+      getRequest.onerror = function(){
+        resolve("");
+        db.close();
+      }
+    }
+    request.onerror = function(event) {
+      console.error('Database error:', event.target.errorCode);
+      resolve("dberror");
+    };
+
+  })
+}
+
+
+function updateContact(name, wallet) {
+    return new Promise((resolve, reject) => {
+        // Open the database
+        var status = 0;
+        const request = indexedDB.open('ContactDB', 1);
+
+        request.onerror = (event) => {
+            resolve(status);
+        };
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            // Start a readwrite transaction
+            const transaction = db.transaction(['contacts'], 'readwrite');
+            const objectStore = transaction.objectStore('contacts');
+
+            // First, check if the record exists
+            const getRequest = objectStore.get(name);
+
+            getRequest.onsuccess = (event) => {
+                if (!event.target.result) {
+                    status = 1;
+                    resolve(status);
+                    return;
+                }
+
+                // Update the record with the new wallet data
+                const updateRequest = objectStore.put({ name, wallet });
+
+                updateRequest.onsuccess = () => {
+                    status = 2;
+                    resolve(status);
+                };
+
+                updateRequest.onerror = (event) => {
+                    resolve(status);
+                };
+            };
+
+            getRequest.onerror = (event) => {
+                resolve(status);
+            };
+
+            // Close the database after the transaction completes
+            transaction.oncomplete = () => {
+                db.close();
+            };
+
+            transaction.onerror = (event) => {
+                status = 3;
+                resolve(status);
+                db.close();
+            };
+        };
+
+        request.onupgradeneeded = (event) => {
+            status = 4;
+            resolve(status);
+            //reject('Database upgrade needed, please initialize the database first');
+        };
+    });
+}
+
 
 function saveContact(wallet, name) {
   return new Promise((resolve, reject) => {
