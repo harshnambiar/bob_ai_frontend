@@ -286,7 +286,19 @@ async function getBotResponse(userInput){
           console.log(match5[1]);
           const res = await getNFT(match5[1]);
           console.log(res);
-          return "You want your NFTs don't you?";
+          var j = 0;
+          var rstring = "";
+          while (j < res.length){
+            rstring = rstring.concat((j+1).toString()).concat(" \n ").concat("Token Id: ").concat(res[j].tokenId).concat(" \n ").concat("Token URI: ").concat(res[j].tokenURI).concat(" \n ");
+            j++;
+          }
+          if (rstring == ""){
+            return "You don't own any NFT in this collection.";
+          }
+          else {
+            return rstring;
+          }
+
         }
         else {
             return "looks like this is transaction query isn't correctly formatted: ".concat(qry);
