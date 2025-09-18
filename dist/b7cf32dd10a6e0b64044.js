@@ -687,7 +687,7 @@ async function getNFT(str){
         nfts.push({
           tokenId: tokenId.toString(),
           tokenURI,
-          nft_contract_address
+          contract_address
         });
       } catch (err) {
         console.error(`Error fetching token at index ${i}:`, err.message);
