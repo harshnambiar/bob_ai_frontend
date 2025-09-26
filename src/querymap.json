@@ -4370,7 +4370,7 @@
     "why do i get an error during integration tests while running boba locally?": "why do i get an error during integration tests while running boba locally?",
     "what can i use to index events while deploying boba?": "what can i use to index events while deploying boba?",
     "what can i do if my dapp smart contract requires a greater gas fee to deploy than the boba limit?": "what can i do if my dapp smart contract requires a greater gas fee to deploy than the boba limit?",
-    "what is the boba gas limit for deploying a smart contract?": "what is the boba gas limit for deploying a smart contract?",
+    "what is the boba block gas limit?": "what is the boba block gas limit?",
     "does boba network have a public thegraph node for deploying subgraphs?": "does boba network have a public thegraph node for deploying subgraphs?",
     "why am i getting a gas fee error that the gas limit is 1 quadrillion wei?": "why am i getting a gas fee error that the gas limit is 1 quadrillion wei?",
     "which bridge can i use on boba?": "which bridge can i use on boba?",
